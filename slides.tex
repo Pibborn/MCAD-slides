@@ -1,0 +1,60 @@
+\documentclass[pdf]{beamer}
+\mode<presentation>{\usetheme{Singapore}}
+\beamertemplatenavigationsymbolsempty
+\title{Leader Election in Arbitrary, Asynchronous Networks}
+\author{Michele Castrovilli, Mattia Cerrato, Pasha Ostadi}
+\usepackage{default}
+\usepackage{graphicx}
+\graphicspath{ {./img/} }
+
+\begin{document}
+\Large
+\begin{frame}
+    \maketitle
+\end{frame}
+
+\normalsize
+\begin{frame}{Overview}
+    \begin{itemize}
+        \item Leader Election: a short review
+        \item Floodmax in the asynchronous model
+        \item Why use searching/tree building algorithms?
+        \item Spanning trees
+        \item Breadth-first search
+        \item Bellman-Ford algorithm 
+    \end{itemize}
+\end{frame}
+
+\section{Leader Election}
+\begin{frame}{Leader Election}
+    The leaders is a node in the network that has to "take charge" of a computation
+    
+    \vspace{12pt}
+    \pause
+    All nodes have to agree on a single leader
+    
+    \vspace{12pt}
+    \pause
+    The criteria for choosing a leader is unimportant; usually the Process ID is used 
+\end{frame}
+
+\section{Floodmax}
+\begin{frame}{Synchronous Floodmax}
+    \vspace{12pt}
+    Each node knows the diameter \emph{diam} of the network, and has an unique identifier, UID. \\
+    \pause
+    For every round from 0 to \emph{diam}:  
+    \pause
+    \begin{enumerate}
+        \item Send the maximum ID you found so far
+        \pause
+        \item Receive another ID, $ID_{2}$. If $ID_{2} >$ UID, \\
+         UID $\leftarrow$ $ID_{2}$ 
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Asynchronous Floodmax}
+    
+\end{frame}
+
+\end{document}
