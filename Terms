@@ -1,0 +1,401 @@
+Chapter 1
+Invariant assertions, simulations.
+invariant is true for every reachable state of a system
+simulation is a formal relationship between a pair of systems, one being the problem, and the other the solution.
+messages arriving at arbitrary times, and different processor speeds.
+
+Chapter 2
+Synchronous network system, nodes of a directed network graphs.
+elements of the nodes are "processors"  (can be software).
+Dag G = (V,E)
+n is |V| number of nodes.
+for each node i of G, out-nbrs_i is the outgoing neighbors of i,
+    in-nbrs_i is the incoming (edges to i)
+distance(i,j) is length of shortest directed path from i to j in G
+if it exists, otherwise it's infinite (*inf*).
+diam (diameter) is the max distance(i,j) from all pairs (i,j).
+fixed message alphabet M, and null is absence of message.
+for each node i in V, process is:
+    states_i: a (non) finite set of states
+    start_i: nonempty subset  of states_i which are the starting
+             ones.
+    msgs_i: message-generation function, maps states_i X out-nbrs_i
+            to elements of M U {null} (ergo, for each state and the
+            neighbors, it defines a possible message to send)
+    trans_i: state transition function, maps states_i and vectors 
+             (with index in-nbrs_i) of elements M U {null} to
+             states_i. (ergo, based on the state and the input from 
+             neighbors, it changes the state of which the process is
+             in).
+states is not finite, (allows for unbounded data structures).
+for each edge (i,j) in G, there is a channel (/link) which is a location that can hold max one message in M. (ergo, each process can receive from another, one message at a time).
+
+System begins with processes in arbitrary start states, and empty channels. Processes in lock-step do:
+    - Apply the message generation function to the state, and
+      generate the messages to the neighbors.
+    - Apply the state transition function to the current state +
+      incoming messages, and get the new states. Remove all messages.
+That above is a round. Model is deterministic.
+Halting: "halting states", no more activity. No more messages, and a self loop for the state transition.
+
+Variable start times: different rounds of starting. (environment node) with edges to all nodes. "wake-up" messages to all processes. "quiescent", no messages to be generated, but only a different states, due to wake-up or non null message from another process previously awakened.
+
+Undirected graphs: directed graphs + bidirectional edges. Notation:
+  nbrs_i for neighbors of i.
+
+Failures:
+process failures, link failures.
+stopping failure by stopping in the middle of execution.
+ either before step 1 or step 2. it fails in step 1 usually. (subset
+ of messages, arbitrary, not sequential(<params>)).
+ Byzantine failure: generate next message and state in arbitrary way, not following the rules of the functions.
+ Link can fail by losing messages. 
+
+ IO:
+ Encoding input and output in states. Input variables in the start states. A process can have multiple start states. Different input values in the input variables.
+Output in output variables, result of the first write operation performed. (write once variable). Can be read indefinitely.
+
+Executions:
+State assignment, message assignment, execution is an infinite sequence
+C0,M1,N1,C1,M2,N2,C2....,
+Cr is state assignment, Mr and Nr are message assignments.
+Cr is system after r rounds, Mr and Nr are messages Sent and Received at round r. Also referred as the time r.
+Two executions are indistinguishable (x ~i y, the i is above the
+tilde) if process i has same sequence of states, outgoing messages,
+and incoming messages. they are also indistinguishable to process i
+through r rounds, if i has same sequence of states, same sequence of outgoing messages, and incoming, up to the round r.
+
+Proof methods.
+Invariant assertions, property that is true in every execution. 
+Proven by induction on r. with r = 0.
+Simulations, A implements some other algorithm "B", same i/o 
+behavior. Correspondence between A and B, is asserted related to the states. Same input, and same failure pattern for the same n rounds.
+Simulation relation. Proven by induction on number of completed rounds.
+
+Complexity Measures:
+Time complexity and communication complexity.
+Time complexity is in rounds until output required is produces or processes halt.
+With variable start times, the complexity is measured from the first wake-up.
+Communication complexity measured in number of non-null messages sent. (also n bits in message). 
+Time more important usually. Communication is important only if causing congestion.
+
+Randomization.
+Random  function in addition to msg gen and transition functions.
+rand_i component for each node.
+for each state s, rand_i(s) is a probability distribution over a subset of states_i. In each round of execution is used to pick new states, and then the other msg and trans are used normally.
+Dr new process states after the round r random choice.
+UID is also unique identifier, some value that will be different for each process.
+
+Rounds are only present in synchronous settings.
+Chapter 3-4 read only, without writing notes here.
+Chapter 8
+
+Asynchronous automaton model
+I/O automaton
+Composition operation, combining automatons to make larger one.
+Fairness, all components should have fair turns.
+I/O automata
+State machine with transitions are named actions. Actions classified as : input output or internal.
+Internal actions visible only to itself. Input not controllable.
+P_i is a circle, with arrows labeled by input actions, and outgoing arrows as output actions. init(v)_i represent receipt of value v.
+output in " decide(v)_i" 
+Message system, output with "send(m)_i,j" Pi sends m to  Pj, "receive(m)_j,i" Pi receives a message from Pj. In doing these, it may change state.
+FIFO message channel. Ci,j input as send, output as receive. 
+order of actions taken is unpredictable.
+"signature" , description of input/output and internal actions.
+signature S = (input act (in(S)), output act (out(S)), int act (int(S))). 
+external ext(S) = in(S) U out(S).
+locally controlled actions local(S) = out(S) U int(S).
+acts(S) is all actions of S.
+external signature extsig(S)  = (in(S), out(S), empty) (interface)
+IO automaton A :
+  - sig(A) , signature
+  - states(A), a [finite] set of states
+  - start(A) , non empty subset of states, initial ones.
+  - trans(A) , state transition relation trans(A) included in
+    states(A) × acts(sig(A)) × states(A), so, for each state
+    and action, we have one state as a result.
+  - tasks(A), task partition, equivalence relation of 
+    local(sig(A)), at most countably many equivalence classes
+
+acts(A) = acts(sig(A)).
+A is closed if it has no inputs. in(A) = empty.
+an element of of trans(A) is called a transition/step.
+the tuple of the trans(A) , is called input transition/output transition, based on the action that made the transition.
+if an action pi, is part of the tuple from s, in trans(a), the 
+action pi is said to be enabled in s. every input action is required to be enabled in every state. automata are " input-enabled"
+so, the automata is not able to block the input from occurring.
+s is quiescent if the only actions enabled in s are inputs.
+tasks are "threads of control". fairness condition on an execution,
+fair turns for each of the tasks. task C is enabled in state s, means
+some action in C is enabled in s.
+transition relation is precondition-effect style.
+this is executed as a single transition.
+if a sig component is not mentioned, it's empty.
+Execution fragment, is a finite sequence, s0, pi1, s1, pi2.... pir, sr. or infinite of alternating states, so that (s_k,pi_k+1,s_k+1) is a transition of A for every k≥0.
+if the sequence is finite, it has to end with a state.
+if the fragment begins with a start state, is called execution.
+    set of executions of A with execs(A)
+state is reachable if it is the final state of a finite execution of A.
+if b and b' are two execution fragments, and b' starts with the last state of b, then b·b' for representing the sequence obtained by concatenating those, eliminating the duplicate state resulting.
+
+if observing only the external behavior, we want a trace(b), which contains only the external actions. b'' is a trace of A only if B is the trace of an execution of A.
+    traces(A) denotes the set of traces.
+
+Composition and hiding output actions. automaton representing complex system is constructed by composing automata of individual system components.
+when a component automaton has a step involving pi, all component automata that have that pi in the signature, also do.
+A is not composable with B unless the internal actions are disjoint.
+A is not composable with B unless the set of output actions are disjoint. We can compose a countably infinite collection of automata,
+but every action is an action of finitely many components.
+By saying every component exist, and a wake-up phase starts later, we can model also dynamic systems, in which components get added later.
+
+Si meaning a signature.
+{Si} where i is in I, is compatible if
+forall i j . j is in I, and i≠j this holds:
+1 - int(Si) intersection acts(Sj) = empty
+2 - out(Si) intersection out(Sj) = empty
+3 - No action is contained in infinitely many sets acts(Si).
+A collection of automata is compatible if the signatures are.
+
+S = \prod{i in I}Si of compatible signatures {Si}
+ - out(S) = \union{i in I} out(Si)
+ - int(S) = \union{i in I} int(Si)
+ - in(S)  = \union{i in I} in(Si) - \union{i in I} out(Si)
+
+the composition A = \prod{i in I} Ai can be defined as:
+  - sig(A) = \prod{i in I} sig(Ai)
+  - states(A) = \prod{i in I} states(Ai)
+  - start(A) = \prod{i in I} start(Ai)
+  - trans(A) is set of triples (s, pi,s') for all i in I, if pi in 
+    acts(Ai) then (si,pi,s'i) is in trans(Ai), otherwise si=s'i
+  - tasks(A) = \union{i in I} tasks(Ai)
+
+b|Ai is the subsequence of B consisting in only thee actions of Ai.
+
+Hiding:
+S is a signature, sigma is contained in out(S) , hide_sigma(S) is a new S' signature, so that:
+in(S') = in(S)
+out(S') = out(S) - sigma and
+int(S') = int(S) \union sigma.
+the hiding operation is simply a new atomaton A' obtained from A, by replacing sig(A) with sig(A') = hide_sigma(sig(A)).
+The intuition is simply, some actions are not outwards anymore, but just internal.
+
+Fairness:
+an exec fragment alpha is fair if for each class C in tasks(A):
+1 - if alpha is finite, C is not enabled in the final state.
+2 - if alpha is infinite, then alpha contains infinitely many events from C, or infinitely many occurrences of states in which C is not enabled.
+intuitively: each task C is given a turn, so either an action from C can be performed, or no action from C can be performed since it's not enabled.
+Basically, more intuitively again: C has infinitely many turns if it's allowed to execute, and this is for each action.
+
+fairexecs(A) is the set of fair executions.
+A finite execution can be extended to a fair execution.
+A is any IO automaton:
+1 - if alpha is a finite execution of A, there is a fair execution of A that starts with alpha.
+2 - if beta is a finite trace of A, there is a fair trace of A that starts with beta.
+3 - if alpha is a finite execution of A, and beta is any finite/infinite sequence of input actions of A, there is a fair execution
+alpha·alpha' if A such that the sequence of input actions in alpha' is exactly beta. (this means.... that there is a sequence of input actions of A , that appended after a finite execution, renders it fair.)
+4 - if beta is a finite trace of A and beta' is any finite/infinite sequence of input actions of A, there is a fair execution alpha·alpha' of A such that trace(alpha) = beta, and that the sequence of actions in alpha' is exactly beta'
+
+Proof methods:
+Invariant assertion:
+a property that is true for all reachable states of A.
+invariants proven on induction on the number of steps in an execution leading to the state. invariants are proved after an arbitrary number of steps.
+an IO automaton is a "black box" from the user, he just knows the traces of the executions. some properties are formulated as properties of the traces or fair traces.
+a trace property consists in:
+sig(P) is the signature containing no internal actions
+traces(P) is a set of finite/infinite sequences of actions in acts(sig(P))
+
+a trace property specifies an external interface, and a set of sequences of the interface.
+acts(P) is a shorthand for acts(sig(P)) and other stuff.
+IO automaton A satisfies a trace property P means two different things:
+1 - extsig(A) = sig(P) and traces(A) contained in traces(P)
+2 - extsig(A) = sig(P) and fairtraces(A) contained in traces(P)
+intuitively every external behavior produced by A is permitted by property P.
+by composition of trace properties, we have a collection of Pi and it's compatible if thee signatures are, so \prod{i in I} P_i is the trace property so that the sig(P) is the product of all the sig(P_i)
+and traces(P) is the set of sequences beta of external actions of P such that beta|acts(Pi) contained in traces(Pi) for all i in I.
+
+Safety
+trace property P is trace safety property for the conditions:
+1 - traces(P) is nonempty
+2 - traces(P) is prefix-closed, so if beta is in traces(P) and beta' is a finite prefix of beta, beta' is also in traces(P).
+(ergo, if a sequence is there, a prefix of the sequence is also there).
+3 - traces(P) is limit closed, if b_1,b_2,.... is an infinite sequence of finite sequences in traces(P) and for each i , b_i is a prefix of b_i+1, then the unique sequence beta that is the limit of the b_i under successive extension ordering, is also in traces(P).
+(ergo, a sequence of successive prefixes, results in something still in the traces(P))
+if something "bad" happens, it's in the traces
+if P is a safety property, then the traces of A is contained in the traces of P, is saying that the  fairtraces of A are also contained in the traces(P), which is equivalent to say that all the finite traces of A are in traces(P)
+
+Liveness
+trace property P is a trace liveness property, provided that every
+finite sequence over acts(P) has some extension in traces(P).
+informally: a good thing eventually happens, no matter what has happened up until that point.
+Theorem 8.8
+If P is both a safety property and liveness property, P is the set of all (finite and infinite) sequences of actions in acts(P).
+Theorem 8.9
+If P is an arbitrary trace property with traces(P)≠empty , there exists a safety property S and a liveness property L so that:
+1 - sig(S) = sig(L) = sig(P)
+2 - traces(P) = traces(S) intersection traces(L)
+
+compositional...
+simply saying that a composition of automata, has a trace property which is the composition of the components trace properties.
+Hierarchical proofs
+proof strategy based on hierarchy.
+successive refinement, top level is a specification 
+then abstract representation
+one way relationship between algorithms, for any execution of the lower level, there is a "corresponding" execution of the higher level one. simulation relation.
+
+complexity measures
+natural notion of time complexity. time bounds for any subset of equivalence classes in the task partition tasks(A). we have for any task C, an upper bound upper_C, for any fair execution, a real valued time can be associated with every event of alpha.
+1 - thee times are monotone non decreasing in alpha
+2 - if alpha is infinite, times approach infinite
+3 - from any point in alpha, a task C can be enabled for time at most upperC before some action in C must occur.
+intuitively: we have an upper bound of upperC on the time any task C takes a step, given the possibility of it happening.
+timed execution is a fair execution with associated times.
+
+indistinguishable executions
+if alpha and alpha' are executions of two composed systems,
+each containing automaton A, alpha and alpha' are
+indistinguishable to A provided that alpha|A=alpha'|A,
+(the actions taken in A are the same).
+
+Randomization
+probabilistic automaton model, transition doesn't have a
+state after, but a probability distribution over a subset
+of the set of states. If there is not a random choice, then
+a trivial distribution P is used. Every probabilistic IO
+has a nondeterministic version, by replacing each transition
+with elements of the domain, so the choice simply becomes
+nondeterministic.
+An execution is generated by a series of pairs of choices.
+the restriction on thee choices is that the nondeterministic
+choice must be "fair", so that the executions generated by
+the sequences possible are fair. 
+
+Chapter 14
+Modeling IV: Asynchronous Network Model
+Communication point to point.
+n-node directed graph G= (V,E)
+out-nbrs_i and in-nbrs_i to denote the outgoing and incoming
+neighbors of node i in the digraph
+distance(i,j) for the length of the shortest directed path
+from i to j in G, and diam for the maximum distance from any
+node to any other.
+processes with the nodes of G, and communications over
+channels. no rounds. M is a fixed message alphabet.
+Processes Pi, some input and output actions, output in the
+form of "send(m)_i,j where j is outgoing neighbor of i, and
+m is a message. inputs of receive(m)_j,i where j is an
+incoming neighbor.
+Pi can be an arbitrary IO automaton.
+stopping failure, and byzantine failure.
+Stopping failure is modeled by including a stop_i input
+action, which disables all tasks. Byzantine failure is
+allowing P_i to be replaces by arbitrary IO automaton
+having the same interface.
+
+send/receive channels.
+channel associated with edge (i,j) of G is modeled as IO
+automaton Ci,j,  external interface of input send(m)_i,j
+and output receive(m)_i,j where m is in M.
+the channel could be an arbitrary automaton, except for the
+interface.
+trace property P, like, a message received must be sent
+first.
+sig(P) is external signature, and traces(P) are fair traces.
+collection of axioms  and giving an automaton which
+satisfies the sig and traces. 
+mixed strategy, safety properties described in terms of
+basic automaton, and liveness using special liveness axioms.
+
+Reliable FIFO channel.
+send action adds a message to the end of the queue, the
+receive is enabled if m is first on the queue, and it
+removes the first message from the queue.
+task partition puts the locally controlled actions in a
+single class. (8.1.1 as the example)
+called also universal reliable FIFO channel.
+  alternative specifications  using axioms:
+  trace property P with sig(P) equal to the original signature
+  traces(P) equal to the set of sequences beta in sig(P)
+  that:
+    - a function "cause" exists, that maps every receive in
+    beta to a preceding send event in beta so that
+    1 - for every receive event pi, pi and cause(pi) have
+    the same message argument
+    2 - cause is surjective (onto)
+    3 - cause is injective (one-to-one)
+    4  - cause preserves order, there are no events p1 p2
+    with p1 preceding p2 in beta, and cause(p2) preceding
+    cause(p1) in beta.
+    cause is a device for identifying a send event, that
+    causes each receive event.
+    1 delivery correct, 2 messages not lost, 3 not duped, 
+    4 not reordered
+
+Reliable reordering channel:
+same as universal, but doesn't preserve the order
+omits clause 4
+
+Channels with failures
+omits clause 2 and clause 3
+but with a limited amount of message loss is :
+message sent infinitely many times, it must be received
+infinitely many times.
+SLL : strong loss limitation, for infinite send events,
+infinite send events in the range of the cause function for
+the same message. 
+WLL : weak loss limitation
+infinite send events, the range of thee cause function is
+infinite (but not the same send event)
+Finite duplication: "cause" maps finitely many receive to any
+particular send event. 
+
+Asynchronous send/receive network system 
+composing process and channel IO automata, using ordinary IO
+automaton composition.
+Pi performs a send output, a send input action is performed
+by the channel (state does get updated in both components).
+
+Properties of send receive systems with reliable FIFO
+channels.
+Having an async send/receive system A with reliable FIFO
+channels. beta is any trace of A. there is an irreflexive 
+partial order →_beta on the events in beta. 
+if pi and sigma are two events in beta, with pi preceding
+    sigma, we say that 
+    pi →_beta sigma, or sigma depends on pi if one of these
+    holds:
+    1 - pi and sigma are events of the same process Pi
+    2 - pi is a send(m)i,j and sigma is the receive(m)i,j
+        event
+    3 - pi and sigma are related by relationships of types 1
+        and 2
+theorem 14.1
+If we reorder the sequence preserving the →_beta ordering,
+we obtain another fair trace. 
+Corollary 14.2 , if we reorder those, the fair execution
+that has the same trace as the reordering, is
+indistinguishable from the first fair execution of the non
+reordered trace, to every process Pi.
+
+Complexity measures:
+communication complexity in terms of the number of messages
+sent, or number received. (maybe counting bits)
+For measuring complexity, we have an upper bound of l for
+each task of each process, so we have an upper bound of the
+time between successive chances for the task to perform a
+step. We also assume the time for delivery, and in case of
+FIFO reliable, we have a "d" upper bound, for the oldest
+message in the channel. Time complexity takes into account
+the pileups of messages in channels. kth message is
+delivered within time k*d.
+Or also, we have an upper bound of d on the delivery for
+each message , regardless of pileups.
+
+Broadcast systems....
+[don't really need those]
+Multicast
+[not either that]
+
+
+Chapter 15!
+
