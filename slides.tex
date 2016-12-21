@@ -103,7 +103,25 @@
 
 \section{BellmanFord}
 \begin{frame}{BellmanFord}{Algorithm}
-	
+	$AsynchBFS_i$
+	\begin{block}{Signature}
+		\begin{columns}
+			\column{.5\textwidth}
+			Input:\\
+			\hspace*{\parindent} $receive(m)_{i,j}, m \in \mathbb{N}, j \in nbrs$
+			\column{.5\textwidth}
+			Output:
+			\hspace*{\parindent} $send(m)_{i,j}, m \in \mathbb{N}, j \in nbrs$
+		\end{columns}
+	\end{block}
+	\begin{block}{States}
+	$dist \in \mathbb{N} \cup \{\infty\}$, initially $0$ if $i=i_0$, $\infty $ otherwise\\
+	$parent \in nbrs \cup \{null\}$, initially $null$\\
+	for every $j \in nbrs$:\\
+	\hspace*{\parindent}
+	\parbox{\textwidth}{
+	$send(j)$, a FIFO queue of elements of $\mathbb{N}$, initially containing the single element $0$ if $i=i_0$, else $\emptyset$}
+	\end{block}
 	
 \end{frame}
 \begin{frame}{BellmanFord}{Complexity}
