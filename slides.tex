@@ -111,11 +111,64 @@
 
 \section{Spanning Tree}
 \begin{frame}{Asynchronous Spanning Tree}{Why?}
-	
+    A spanning tree allows for a process to implement broadcast and convergecast on
+    an arbitrary network that allows for only point to point communication.\\
+    \vspace{12pt}
+    By having an unrooted spanning tree, we can also implement a leader election 
+    easily.
+\end{frame}
+
+\begin{frame}{Asynchronous Spanning Tree}{STtoLeader}
+    The algorithm uses a convergecast of \emph{elect} messages starting from the leaves.\\
+    Each leaf node sends an \emph{elect} message to the unique neighbor.\\
+    If a node receives \emph{elect} messages from all its neighbors except one, it 
+    then sends an \emph{elect} message to that neighbor.\\
+    \vspace{12pt}
+    In the end, we have two cases:
+    \begin{itemize}
+        \item{If a process receives \emph{elect} messages on every channel before
+              sending an \emph{elect} message themselves, it elects themselves as a leader.}
+        \item{If two \emph{elect} messages are sent on some edge in both directions, then
+          one of the two processes at the endpoints will elect itself as a leader, based 
+          on some condition (e.g., larger UID).}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Asynchronous Spanning Tree}{STtoLeader Results}
+    Message complexity: \emph{n}.\\
+    Time complexity: $\mathbb{O}(n*(l+d))$.\\
+    \vspace{12pt}
+    $n$ is the number of nodes in the graph.\\
+    $l$ is the upper bound for each task in the process to be completed.
+    $d$ is the upper bound for a message to be passed through the channel.
 \end{frame}
 
 \begin{frame}{Asynchronous Spanning Tree}{Algorithm}
+	$AsynchSpanningTree_i$
+    \begin{block}{Signature}
+        \begin{columns}
+            \column{.5\textwidth}
+            Input:\\
+            \hspace*{\parindent} 
+              {$receive("search")_{j,i}, j \in nbrs$}
+            \column{.5\textwidth}
+            Output:
+            \hspace*{\parindent}
+            \parbox{\textwidth}{$send("search")_{i,j}, j \in nbrs$\\
+               $parent(j)_i, j \in nbrs$}
+        \end{columns}
+    \end{block}
+    \begin{block}{States}
+        $parent \in nbrs \cup \{null\}$, initially $null$\\
+        $reported$, a Boolean, initially $false$\\
+        for every $j \in nbrs$:\\
+        \hspace*{\parindent}
+        \parbox{\textwidth}{$send(j) \in \{search,null\}$,
+        initially $search$ if $i=i_0$, else $null$}
+    \end{block}
+\end{frame}
 
+\begin{frame}{Asynchronous Spanning Tree}{Algorithm}
 \end{frame}
 
 \begin{frame}{Asynchronous Spanning Tree}{Proof}
@@ -128,11 +181,6 @@
 \end{frame}
 
 \begin{frame}{Asynchronous Spanning Tree}{Broadcast and Child Pointers}
-	
-	
-\end{frame}
-
-\begin{frame}{Asynchronous Spanning Tree}{STtoLeader}
 	
 	
 \end{frame}
