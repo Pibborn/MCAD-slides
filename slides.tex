@@ -5,7 +5,7 @@
 \author{Michele Castrovilli, Mattia Cerrato, Pasha Ostadi}
 \usepackage{default}
 \usepackage{graphicx}
-\graphicspath{ {./img/} }
+\graphicspath{{./img/}}
 
 \begin{document}
 \Large
@@ -27,7 +27,7 @@
 
 \section{Leader Election}
 \begin{frame}{Leader Election}
-    The leaders is a node in the network that has to "take charge" of a computation
+    The leader is a node in the network that has to `take charge' of a computation
     
     \vspace{12pt}
     \pause
@@ -36,6 +36,10 @@
     \vspace{12pt}
     \pause
     The criteria for choosing a leader is unimportant; usually the Process ID is used 
+    
+    \vspace{12pt}
+    \pause
+    We'll be tackling the leader election problem in an asynchronous arbitrary network 
 \end{frame}
 
 \section{Floodmax}
@@ -51,10 +55,58 @@
         \item Receive another ID, $ID_{2}$. If $ID_{2} >$ UID, \\
          UID $\leftarrow$ $ID_{2}$ 
     \end{enumerate}
+    \pause
+    After \emph{diam} rounds, every process will have the maximum UID of the network.
+    If that UID corresponds to its own, the node will elect itself as the leader.
 \end{frame}
 
-\begin{frame}{Asynchronous Floodmax}
-    
+\begin{frame}{Asynchronous Floodmax}{FloodMax}
+    The FloodMax algorithm can be extended to the asynchronous network, by simulating
+    the rounds.\\
+    \pause
+    \vspace{12pt}
+    Each process sends a round r message to the neighbors, each process waits until 
+    they received the round r message from every incoming neighbor. \\ 
+    At that point, the node can prooced with the next round.\\
+    \pause
+    \vspace{12pt}
+    Simulating \emph{diam} rounds, the algorithm can terminate correctly.
+\end{frame}
+
+\begin{frame}{Asynchronous Floodmax}{OptFloodMax}
+    An optimization was shown, called \emph{OptFloodMax}.\\
+    This optimization reduced greatly the number of messages sent.\\
+    \pause
+    \vspace{12pt}
+    Each node sends to its neighbors an update of the maximum UID they know, only if
+    it changed from the previous round.\\
+    \pause
+    \vspace{12pt}
+    This cannot be ported to the asynchronous network, as the nodes cannot determine whether
+    they received all the messages from the current round.\\
+    \pause
+    \vspace{12pt}
+    Adding dummy messages to help processes determine the end of the round destroys the 
+    optimization.
+\end{frame}
+
+\begin{frame}{Asynchronous Floodmax}{OptFloodMax}
+    The algorithm can be run purely asynchronously, without rounds.\\
+    The processes will propagate UIDs only when they receive a greater one.\\
+    \pause
+    \vspace{12pt}
+    This strategy will eventually propagate the maximum.\\
+    \pause
+    \vspace{12pt}
+    The processes do not know when to terminate.
+\end{frame}
+
+\begin{frame}{What can we do?}
+    There are different solutions to this problem.\\
+    \vspace{12pt}
+    We'll be looking at the \emph{Asynchronous broadcast and convergecast, based on breadth-first search}.\\
+    \vspace{12pt}
+    To solve the leader election problem, we'll start from a spanning tree.
 \end{frame}
 
 \section{Spanning Tree}
@@ -108,8 +160,9 @@
         $parent \in nbrs \cup \{null\}$, initially $null$\\
         for every $j \in nbrs$:\\
         \hspace*{\parindent}
-        \parbox{\textwidth}{
-            $send(j)$, a FIFO queue of elements of $\mathbb{N}$, initially containing the single element $0$ if $i=i_0$, else $\emptyset$}
+        \parbox{\textwidth}{$send(j)$,
+        a FIFO queue of elements of $\mathbb{N}$,
+        initially containing the single element $0$ if $i=i_0$, else $\emptyset$}
     \end{block}
 	
 \end{frame}
