@@ -188,8 +188,25 @@
 
 \section{Breadth-First Search}
 \begin{frame}{Breadth-First Search}{Problem}
-	
-	
+	Another way to build a Spanning Tree is via Breadth-First Search. \\
+    \vspace{12pt}
+    \pause
+    As in the synchronous setting, we can also find the shortest paths. So we change the graph $G = (V, E)$ to also have \emph{non-negative} weights. A vertex knows about its edges' weights. \\
+    \vspace{12pt}
+\end{frame}
+
+\section{Breadth-First Search}
+\begin{frame}{Breadth-First Search}{Problem}
+    To find the shortest paths in a distributed manner, the nodes have to change their parent designations if they are reached along a shorter path. \\
+    \vspace{12pt}
+    \pause
+    However, there is no way to guarantee termination: the node has to wait indefinitely to see if it can obtain a closer parent. \\
+    \vspace{12pt}
+    \pause
+    Even if a Spanning Tree is eventually built, the single nodes cannot be aware of it. \\
+    \vspace{12pt}
+    \pause
+    Some algorithms (LayeredBFS, HybridBFS) solve this problem.
 \end{frame}
 
 \begin{frame}{Breadth-First Search}{Algorithm}
@@ -244,7 +261,23 @@
 \end{frame}
 
 \begin{frame}{Breadth-First Search}{Results}
-    
+    \begin{columns}
+        \column{.5\textwidth}
+            Message Complexity: \\
+            \hspace*{\parindent} $\mathbb{O}(n|E|)$ \\
+            \pause
+            \small
+            Because each node can acquire different up to $n$ estimates of its distance to the starting node. In the worst case scenario, each estimate causes an update, each requiring at most $|E|$ messages to notify the adjacent nodes.
+        \pause
+        \column{.5\textwidth}
+            \normalsize
+            Time Complexity:
+            \hspace*{\parindent} $\mathbb{O}(diam \times n(l + d))$ \\
+            \pause
+            \small
+            Because the length of a shortest path from the starting node to any node is at most $diam$; and at most $n$ messages are ever in any channel. \\
+           
+    \end{columns} 
 \end{frame}
 
 \section{BellmanFord}
