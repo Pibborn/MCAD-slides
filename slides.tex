@@ -6,6 +6,7 @@
 \usepackage{default}
 \usepackage{graphicx}
 \graphicspath{{./img/}}
+\usepackage{tcolorbox}
 
 \begin{document}
 \Large
@@ -204,7 +205,9 @@
         \end{columns}
     \end{block}
     \begin{block}{States}
+        \begin{tcolorbox}[height=0.8cm,colframe=red]
         $dist \in \mathbb{N} \cup \{\infty\}$, initially $0$ if $i=i_0$, $\infty $ otherwise\\
+        \end{tcolorbox}
         $parent \in nbrs \cup \{null\}$, initially $null$\\
         for every $j \in nbrs$:\\
         \hspace*{\parindent}
@@ -215,9 +218,33 @@
 	
 \end{frame}
 
+\begin{frame}{Breadth-First Search}{Algorithm}
+	\begin{block}{Transitions}
+        \vspace{2mm}
+        \begin{columns}
+            \column{.5\textwidth}
+            $\mathbf{send(m)_{i, j}:}$\\ 
+                \emph{Precondition}: \\ 
+                \small $m$ is first on $send(j)$ \\
+                \normalsize \emph{Effect}: \\
+                \small remove first element of $send(j)$
+            \column{.5\textwidth}
+            \normalsize $\mathbf{receive(m)_{i, j}: }$ \\
+                \emph{Effect}: \\
+                \small
+                \begin{tcolorbox}[colframe=red]
+                    if $m+1 < dist$ then \\
+                    \hspace*{\parindent} $dist := m+1$ \\
+                    \hspace*{\parindent} $parent = j$ \\
+                    \hspace*{\parindent} for all $k \in nbrs - \{j\}$ do \\
+                    \hspace*{\parindent} \hspace*{\parindent} add $dist$ to $send(k)$ \\
+                \end{tcolorbox}
+        \end{columns}
+	\end{block}
+\end{frame}
+
 \begin{frame}{Breadth-First Search}{Results}
-	
-	
+    
 \end{frame}
 
 \section{BellmanFord}
