@@ -75,7 +75,7 @@
 \end{frame}
 
 \begin{frame}{Asynchronous Floodmax}{OptFloodMax}
-    An optimization was shown, called \emph{OptFloodMax}.\\
+    An optimization for the synchronous case was shown, called \emph{OptFloodMax}.\\
     This optimization reduced greatly the number of messages sent.\\
     \pause
     \vspace{12pt}
@@ -137,7 +137,7 @@
 
 \begin{frame}{Asynchronous Spanning Tree}{STtoLeader Results}
     Message complexity: \emph{n}.\\
-    Time complexity: $\mathbb{O}(n*(l+d))$.\\
+    Time complexity: $\mathcal{O}(n*(l+d))$.\\
     \vspace{12pt}
     $n$ is the number of nodes in the graph.\\
     $l$ is the upper bound for each task in the process to be completed.
@@ -150,11 +150,11 @@
         \begin{columns}
             \column{.5\textwidth}
             Input:\\
-            \hspace*{\parindent} 
+            \hspace*{2pt} 
               {$receive("search")_{j,i}, j \in nbrs$}
             \column{.5\textwidth}
             Output:
-            \hspace*{\parindent}
+            \hspace*{2pt}
             \parbox{\textwidth}{$send("search")_{i,j}, j \in nbrs$\\
                $parent(j)_i, j \in nbrs$}
         \end{columns}
@@ -163,27 +163,197 @@
         $parent \in nbrs \cup \{null\}$, initially $null$\\
         $reported$, a Boolean, initially $false$\\
         for every $j \in nbrs$:\\
-        \hspace*{\parindent}
+        \hspace*{2pt}
         \parbox{\textwidth}{$send(j) \in \{search,null\}$,
         initially $search$ if $i=i_0$, else $null$}
     \end{block}
 \end{frame}
 
 \begin{frame}{Asynchronous Spanning Tree}{Algorithm}
+    \begin{block}{Transitions}
+        \begin{columns}[t]
+            \column{.5\textwidth}
+            $send("search")_{i,j}$ \\
+            \hspace*{2pt} {Precondition:} \\
+            \hspace*{5pt} {$send(j) = search$} \\
+            \hspace*{2pt} {Effect:} \\
+            \hspace*{5pt} {$send(j) := search$} \\
+            \vspace{12pt}
+            $receive("search")_{j,i}$ \\
+            \hspace*{2pt} {Effect:} \\
+            \hspace*{5pt} {if $i \neq i_0$ and $parent = null$ then}\\
+            \hspace*{7pt} {$parent := j$} \\
+            \hspace*{7pt} {for all $k \in nbrs - \{j\}$ do} \\
+            \hspace*{9pt} {$send(k) := search$} 
+            \column{.5\textwidth}
+            $parent(j)_{i}$ \\
+            \hspace*{2pt} {Precondition:} \\
+            \hspace*{5pt} {$parent = j$} \\
+            \hspace*{5pt} {$reported = false$} \\
+            \hspace*{2pt} {Effect:} \\
+            \hspace*{5pt} {$reported := true$} 
+        \end{columns}
+    \end{block}
+    \vskip-3cm
+    \begin{columns}
+     \column{.5\textwidth}
+    \column{.5\textwidth}
+    \begin{block}{Tasks}
+    $\{parent(j)_i : j \in nbrs\}$\\
+    for every $j \in nbrs$: \\
+        \hspace*{2pt}
+        \parbox{\textwidth}{$\{send("search")_{i,j}\}$}
+    \end{block}
+    \end{columns}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Proof}
-	
-	
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 1}
+    In any reachable state, the edges defined by all the parent variables form a spanning tree
+    of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
+    then $i$ is in this spanning tree.
+    \end{block}	
+    \pause
+    \begin{block}{Proof - Base case (will be reduced, along with blackboard explaining)}
+    The first part is trivially proven,
+    as there are no parent variables, and $G$ contains $i_0$ by definition.\\
+    Second part, we have search messages starting only from $i_0$, by the algorithm definition.\\
+    \end{block}
+\end{frame}
+
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 1}
+    In any reachable state, the edges defined by all the parent variables form a spanning tree
+    of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
+    then $i$ is in this spanning tree.
+    \end{block}	
+    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    We look at each transition, and how it does not change the invariant.
+    \begin{description}
+    \item[$send$]{Since the send transition sends a message from the node i to the neighbors, we need
+        to prove that i is in the spanning tree. By the algorithm, the send transition has the precondition of the $send(j)$ variable, which is set only as the node enters the spanning tree.}
+    \end{description}
+    \end{block}
+\end{frame}
+
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 1}
+    In any reachable state, the edges defined by all the parent variables form a spanning tree
+    of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
+    then $i$ is in this spanning tree.
+    \end{block}	
+    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    \begin{description}
+    \item[$receive$]{\small The receive of a search message to a node not in the spanning tree, allows for the node to enter the spanning tree by setting the parent variable to the neighbor that sent the message. It then sets the variables in order to send the search message to the remaining neighbors.\\
+        If the node already has the parent variable set, it discards the message. 
+    Since this only adds a node, $i_0$ is still contained in the spanning tree.}
+    \end{description}
+    \end{block}
+\end{frame}
+
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 1}
+    In any reachable state, the edges defined by all the parent variables form a spanning tree
+    of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
+    then $i$ is in this spanning tree.
+    \end{block}	
+    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    \begin{description}
+    \item[$parent$]{The parent action will activate once, as the parent variable is set, reporting the node's presence in the spanning tree.}
+    \end{description}
+    \end{block}
+\end{frame}
+
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 2 - Liveness}
+        In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
+        then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
+    \end{block}	
+    \begin{block}{Proof - Base step (will be reduced, along with blackboard explaining)}
+    As the initial state, we have that every $parent_i = null$, so we need to only check $i_0$.
+    As the initial state, $i_0$ has that for all its neighbors $send(j)_i$ contains a search message,
+    therefore proving the invariant.
+    \end{block}
+\end{frame}
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 2 - Liveness}
+        In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
+        then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
+    \end{block}	
+    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    We look at each transition, and show how it doesn't invalidate the invariant.
+    \begin{description}
+    \item[$send$]{As the effect will remove the $search$ message from the $send(j)$ variable, the channel $C_{i,j}$ will now contain a $search$ message instead.}
+    \end{description}
+    \end{block}
+\end{frame}
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 2 - Liveness}
+        In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
+        then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
+    \end{block}	
+    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    \begin{description}
+    \item[$receive$]{As $parent_i$ becomes different than $null$, for each $j \in nbrs - {parent_i}$,
+    it will set $send(j) = search$. For $parent_i$ instead, we can already prove from the first assertion that since a message came from $parent_i$ it must be in the spanning tree, and so its $parent$ variable different than $null$.}
+    \item[$parent$]{It doesn't affect any of the variables in the assertion.}
+    \end{description}
+    \end{block}
+\end{frame}
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 1}
+    In any reachable state, the edges defined by all the parent variables form a spanning tree
+    of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
+    then $i$ is in this spanning tree.
+    \end{block}	
+    \begin{block}{Assertion 2 - Liveness}
+        In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
+        then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
+    \end{block}	
+    \begin{block}{Conclusions}
+        From these two assertions we can then argue that the algorithm constructs a spanning tree.\\
+        Furthermore, for any $i \neq i_0$ we have $parent_i \neq null$ within time $distance(i_0,i)\cdot(l+d)$, which implies the liveness.
+    \end{block}
 \end{frame}
 \begin{frame}{Asynchronous Spanning Tree}{Results}
-	
-	
+    Number of messages: $\mathcal{O}(|E|)$.\\
+    Time upper bound for all processes except $i_0$: $diam(l+d)+l$.\\
+    \vspace{6pt}
+    $|E|$ is the number of edges in the graph.\\
+    $n$ is the number of nodes in the graph.\\
+    $l$ is the upper bound for each task in the process to be completed.\\
+    $d$ is the upper bound for a message to be passed through the channel.\\
+    \pause
+    \vspace{6pt}
+    The paths might be longer than the diameter, nonetheless the time is still bounded in 
+    terms of diameter, because the time of the shortest path might be greater than the 
+    fastest one.
 \end{frame}
 
 \begin{frame}{Asynchronous Spanning Tree}{Broadcast and Child Pointers}
-	
-	
+    \begin{block}{Broadcast}
+        It's easy to modify the algorithm, as we use a method of \emph{piggybacking} on the
+        $search$ message. It also shares the complexities as the spanning tree algorithm.
+    \end{block}
+    \begin{block}{Child Pointers}
+        Since the graph is assumed to be undirected, it's easy for the children to reply
+        directly to the parent, in order for the parent to acknowledge them, or not.\\
+        This can also implement \emph{broadcasting}.\\
+        The complexity of the approach is $\mathcal{O}(n)$ per broadcast, and time complexity
+        $\mathcal{O}(h(l+d))$ where $h$ is the height of the spanning tree, which is might be bounded
+        as $\mathcal{O}(n(l+d))$ if a \emph{AsynchSpanningTree} was used, as the height might be bigger than the diameter. \\
+    \end{block}
+\end{frame}
+
+\begin{frame}{Asynchronous Spanning Tree}{Broadcast and Child Pointers}
+    \begin{block}{Child Pointers}
+        The spanning tree with child pointers can also be used for \emph{convergecast}, with the same complexities as the broadcast.\\
+        The two can be combined in a broadcast, followed by a convergecast to acknowledge the receival.
+    \end{block}
+    \begin{block}{Leader Election}
+        By allowing every node to initiate a broadcast-convergecast, and having UIDs, we can also solve the leader election problem, with every node discovering the maximum UID in the network, and then electing itself as a leader if the maximum UID equals to its own.\\
+        The message complexity of this approach is $\mathcal{O}(n|E|)$.
+    \end{block}
 \end{frame}
 
 \section{Breadth-First Search}
@@ -322,4 +492,5 @@
     \large
     Any questions?
 \end{frame}
+
 \end{document}
