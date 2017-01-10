@@ -6,6 +6,7 @@
 \usepackage{default}
 \usepackage{graphicx}
 \graphicspath{{./img/}}
+\usepackage[absolute,overlay]{textpos}
 
 \begin{document}
 \Large
@@ -74,7 +75,7 @@
 \end{frame}
 
 \begin{frame}{Asynchronous Floodmax}{OptFloodMax}
-    An optimization was shown, called \emph{OptFloodMax}.\\
+    An optimization for the synchronous case was shown, called \emph{OptFloodMax}.\\
     This optimization reduced greatly the number of messages sent.\\
     \pause
     \vspace{12pt}
@@ -136,7 +137,7 @@
 
 \begin{frame}{Asynchronous Spanning Tree}{STtoLeader Results}
     Message complexity: \emph{n}.\\
-    Time complexity: $\mathbb{O}(n*(l+d))$.\\
+    Time complexity: $\mathcal{O}(n*(l+d))$.\\
     \vspace{12pt}
     $n$ is the number of nodes in the graph.\\
     $l$ is the upper bound for each task in the process to be completed.
@@ -149,11 +150,11 @@
         \begin{columns}
             \column{.5\textwidth}
             Input:\\
-            \hspace*{\parindent} 
+            \hspace*{2pt} 
               {$receive("search")_{j,i}, j \in nbrs$}
             \column{.5\textwidth}
             Output:
-            \hspace*{\parindent}
+            \hspace*{2pt}
             \parbox{\textwidth}{$send("search")_{i,j}, j \in nbrs$\\
                $parent(j)_i, j \in nbrs$}
         \end{columns}
@@ -162,13 +163,48 @@
         $parent \in nbrs \cup \{null\}$, initially $null$\\
         $reported$, a Boolean, initially $false$\\
         for every $j \in nbrs$:\\
-        \hspace*{\parindent}
+        \hspace*{2pt}
         \parbox{\textwidth}{$send(j) \in \{search,null\}$,
         initially $search$ if $i=i_0$, else $null$}
     \end{block}
 \end{frame}
 
 \begin{frame}{Asynchronous Spanning Tree}{Algorithm}
+    \begin{block}{Transitions}
+        \begin{columns}[t]
+            \column{.5\textwidth}
+            $send("search")_{i,j}$ \\
+            \hspace*{2pt} {Precondition:} \\
+            \hspace*{5pt} {$send(j) = search$} \\
+            \hspace*{2pt} {Effect:} \\
+            \hspace*{5pt} {$send(j) := search$} \\
+            \vspace{12pt}
+            $receive("search")_{j,i}$ \\
+            \hspace*{2pt} {Effect:} \\
+            \hspace*{5pt} {if $i \neq i_0$ and $parent = null$ then}\\
+            \hspace*{7pt} {$parent := j$} \\
+            \hspace*{7pt} {for all $k \in nbrs - \{j\}$ do} \\
+            \hspace*{9pt} {$send(k) := search$} 
+            \column{.5\textwidth}
+            $parent(j)_{i}$ \\
+            \hspace*{2pt} {Precondition:} \\
+            \hspace*{5pt} {$parent = j$} \\
+            \hspace*{5pt} {$reported = false$} \\
+            \hspace*{2pt} {Effect:} \\
+            \hspace*{5pt} {$reported := true$} 
+        \end{columns}
+    \end{block}
+    \vskip-3cm
+    \begin{columns}
+     \column{.5\textwidth}
+    \column{.5\textwidth}
+    \begin{block}{Tasks}
+    $\{parent(j)_i : j \in nbrs\}$\\
+    for every $j \in nbrs$: \\
+        \hspace*{2pt}
+        \parbox{\textwidth}{$\{send("search")_{i,j}\}$}
+    \end{block}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Asynchronous Spanning Tree}{Proof}

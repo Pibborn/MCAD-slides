@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 
 \begin{document}
-%\printanswers
+\printanswers
 \begin{center}
 \large Distributed Algorithms:\\ Leader election in a Asynchronous arbitrary network.
 \end{center}
@@ -15,19 +15,28 @@
  
 \begin{questions}
 
-\question{Question 1}
+\question{Can the following synchronous algorithms be ported to an asynchronous setting?}
+\begin{parts}
+\part{\emph{FloodMax}}
+\begin{oneparchoices}
+    \CorrectChoice{Yes}
+    \choice{No}
+\end{oneparchoices}
+\part{\emph{OptFloodMax}}
+\begin{oneparchoices}
+    \choice{Yes}
+    \CorrectChoice{No}
+\end{oneparchoices}
+\end{parts}
 
-\begin{choices}
-    \choice{Choice 1}
-    \choice{Choice 2}
-    \CorrectChoice{Choice 3}
-\end{choices}
-
- 
-\question{Question 2}
-\begin{solutionordottedlines}[1in]
-    Solution. \\ Possibly long etc
-\end{solutionordottedlines}
+\question{What are the complexity results of the STtoLeader algorithm?}
+\begin{parts}
+\part{Message complexity: \fillin[n]}
+\part{Time complexity: $\mathcal{O}(\fillin[n*(l+d)])$}
+\end{parts}
+%\begin{solutionordottedlines}[1in]
+%    Solution. \\ Possibly long etc
+%\end{solutionordottedlines}
 
 \question{Question 3}
 \begin{choices}
