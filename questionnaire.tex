@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 
 \begin{document}
-\printanswers
+%\printanswers
 \begin{center}
 \large Distributed Algorithms:\\ Leader election in a Asynchronous arbitrary network.
 \end{center}
@@ -38,6 +38,15 @@
 %    Solution. \\ Possibly long etc
 %\end{solutionordottedlines}
 
+\question{Which of the following are true about the AsynchSpanningTree? \emph{(there might be more than one.)}}
+\begin{checkboxes}
+    \choice{The height of the tree is always equal to the diameter.}
+    \CorrectChoice{The message complexity is $\mathcal{O}(|E|)$}
+    \CorrectChoice{It can be augmented with child pointers.}
+    \choice{It doesn't need to have any process marked.}
+\end{checkboxes}
+
+
 \question{Which of these asynchronous algorithms terminate? \emph{(there might be more than one.)}}
 \begin{checkboxes}
     \CorrectChoice{FloodMax}
@@ -59,18 +68,6 @@
     \CorrectChoice{False}
 \end{choices}
 
-\question{Question 6}
-\begin{parts}
-    \part{This is a \fillin[fillin] question.}
-    \part{This is another fillin \fillin[question].}
-    \part{This is a checkboxes question.\\
-    \begin{oneparcheckboxes}
-        \CorrectChoice{One}
-        \choice{Two}
-        \CorrectChoice{Three}
-        \choice{Four}
-    \end{oneparcheckboxes}}
-\end{parts}
 \end{questions}
 
 \end{document}
