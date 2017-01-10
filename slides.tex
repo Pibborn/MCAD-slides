@@ -207,9 +207,23 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Proof}
-	
-	
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 1}
+    In any reachable state, the edges defined by all the parent variables form a spanning tree
+    of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
+    then $i$ is in this spanning tree.
+    \end{block}	
+    \pause
+    \begin{block}{Proof - will be reduced, along with blackboard explaining}
+    By induction, we begin with only one node, $i_0$. The first part is trivially proven, as there are no
+    parent variables, and $G$ contains $i_0$ by definition.
+    For the second one, we have search messages starting only from $i_0$, by the algorithm definition,
+    and so, this is also proven. \\
+    Now, considering we are in a intermediate state where the assertion is still valid.\\
+    When a search message arrives to a node, they will update their parent variable to a node already in the spanning tree.
+    And since the spanning tree is defined by the parent variables, the node is now part of the spanning tree itself.
+    And by algorithm definition, it will start sending search messages to all the neighbors.
+    \end{block}
 \end{frame}
 \begin{frame}{Asynchronous Spanning Tree}{Results}
 	
