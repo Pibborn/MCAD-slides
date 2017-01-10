@@ -191,22 +191,24 @@
 	Another way to build a Spanning Tree is via Breadth-First Search. \\
     \vspace{12pt}
     \pause
-    As in the synchronous setting, we can also find the shortest paths. So we change the graph $G = (V, E)$ to also have \emph{non-negative} weights. A vertex knows about its edges' weights. \\
+    As in the synchronous setting, we can also find the shortest paths, so that each node is reached in the least amount of edges. \emph{(We are not taking weights into account just yet.)} \\
     \vspace{12pt}
+    \pause
+    We require a starting node $i_0$.
 \end{frame}
 
 \section{Breadth-First Search}
 \begin{frame}{Breadth-First Search}{Problem}
-    To find the shortest paths in a distributed manner, the nodes have to change their parent designations if they are reached along a shorter path. \\
+    To find the shortest paths in a distributed manner, the nodes have to change their parent designations if they are reached along a shorter path. If this happens, they also have to propagate this information to their neighbors, so that they may change their parents. \\
     \vspace{12pt}
     \pause
-    However, there is no way to guarantee termination: the node has to wait indefinitely to see if it can obtain a closer parent. \\
+    However, there is no way to guarantee termination: each node has to wait indefinitely to see if it can obtain a closer parent. \\
     \vspace{12pt}
     \pause
     Even if a Spanning Tree is eventually built, the single nodes cannot be aware of it. \\
     \vspace{12pt}
     \pause
-    Some algorithms (LayeredBFS, HybridBFS) solve this problem.
+    Furthermore, since the search for a parent is independent in each node and asynchronous, there is no guarantee that the Spanning Tree is Breadth-First. A leader can still be elected, however.
 \end{frame}
 
 \begin{frame}{Breadth-First Search}{Algorithm}
@@ -282,12 +284,43 @@
 
 \section{BellmanFord}
 \begin{frame}{BellmanFord}{Algorithm}
-	
-	
-\end{frame}
-\begin{frame}{BellmanFord}{Complexity}
-	
-	
+    \normalsize
+	The Bellman-Ford algorithm can be used to find a Minimum Spanning Tree. The network graph $G = (V, E)$ now also has weights $w_{i, j}$ for each edge $E_{i, j}$ going from vertex $i$ to $j$. The starting node $i_0$ is also required, once again. \\
+    \vspace{12pt}
+    \pause
+	As in AsynchBFS, each process' code must account for erroneous assignments of the $parent$ variable, send out updates to its neighbors and wait for further corrections. \\
+    \vspace{12pt}
+    \pause
+    A node therefore has no way to know when the algorithm has terminated. 
 \end{frame}
 
+\begin{frame}{BellmanFord}{Complexity}
+	\textbf{Message Complexity}: \\
+    \vspace{8pt}
+    \pause
+	$\mathbb{O}(n^n |E|)$ \\
+    \vspace{8pt}
+    \pause
+    \small
+    The number of messages sent on each channel $C_{i, j}$ is proportional to the number of different distance estimates the process $i$ receives. \\
+    \vspace{8pt}
+    \pause
+    In the worst case, each estimate is better than the preceding one and it has to be propagated to all neighbors. \\
+    \vspace{8pt}
+    \pause 
+    The number of different estimates received is bounded on the number of distinct single paths from $i_0$ to $i$ in the network graph: $\mathbb{O}(n^n)$.
+\end{frame}
+
+\begin{frame}{BellmanFord}{Complexity}
+    \normalsize
+    \textbf{Time Complexity}: \\
+    \vspace{12pt}
+    \pause
+    $\mathbb{O}(n^{n+1}(l+d))$ \\
+\end{frame}
+
+\begin{frame}{Thank You!}
+    \large
+    Any questions?
+\end{frame}
 \end{document}
