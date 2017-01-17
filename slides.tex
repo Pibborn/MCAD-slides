@@ -1555,7 +1555,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \begin{columns}
     \begin{column}{.5\textwidth}
         \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-        thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+        thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
         \node[main node] (0) {$i_0$};
         \node[main node] (1) [above right of=0] {};
         \node[main node] (2) [below right of=1] {$i_1$};
@@ -1574,11 +1574,11 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
    \end{column}
    \begin{column}{.5\textwidth}
       \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-      thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+      thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
       \node[main node] (0) {$i_{k-1}$};
       \node[main node] (1) [above right of=0] {};
       \node[main node] (2) [below right of=1] {$i_k$};
-      \node[main node] (4) [below right of=3] {$i_{k+1}$};
+      \node[main node] (4) [right of=2] {$i_{k+1}$};
       \node[draw=none] (5) [above left of=0] {};
       
       \path[every node/.style={font=\sffamily\small}]
@@ -1600,7 +1600,7 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
         \begin{columns}
             \begin{column}{.5\textwidth}
                 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-                thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+                thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
                 \node[main node] (0) {$i_0$};
                 \node[main node] (1) [above right of=0] {};
                 \node[main node] (2) [below right of=1] {$i_1$};
@@ -1617,13 +1617,14 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
                 ;
                 \end{tikzpicture}
             \end{column}
+            \hspace{-35pt}
             \begin{column}{.5\textwidth}
                 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-                thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+                thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
                 \node[main node] (0) {$i_{k-1}$};
                 \node[main node] (1) [above right of=0] {};
                 \node[main node] (2) [below right of=1] {$i_k$};
-                \node[main node] (4) [below right of=3] {$i_{k+1}$};
+                \node[main node] (4) [right of=2] {$i_{k+1}$};
                 \node[draw=none] (5) [above left of=0] {};
                 \node[draw=none] (6) [left of=0] {};
                 
@@ -1647,7 +1648,7 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
         \begin{columns}
             \begin{column}{.5\textwidth}
                 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-                thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+                thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
                 \node[main node] (0) {$i_0$};
                 \node[main node] (1) [above right of=0] {};
                 \node[main node] (2) [below right of=1] {$i_1$};
@@ -1664,9 +1665,10 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
                 ;
                 \end{tikzpicture}
             \end{column}
+            \hspace{-35pt}
             \begin{column}{.5\textwidth}
                 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-                thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+                thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
                 \node[main node] (0) {$i_{k-1}$};
                 \node[main node] (1) [above right of=0] {};
                 \node[main node] (2) [below right of=1] {$i_k$};
@@ -1694,7 +1696,7 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
         \begin{columns}
             \begin{column}{.5\textwidth}
                 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-                thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+                thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
                 \node[main node] (0) {$i_0$};
                 \node[main node] (1) [above right of=0] {};
                 \node[main node] (2) [below right of=1] {$i_1$};
@@ -1711,9 +1713,10 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
                 ;
                 \end{tikzpicture}
             \end{column}
+            \hspace{-35pt}
             \begin{column}{.5\textwidth}
                 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-                thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+                thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
                 \node[main node] (0) {$i_{k-1}$};
                 \node[main node] (1) [above right of=0] {};
                 \node[main node] (2) [below right of=1] {$i_k$};
@@ -1741,7 +1744,7 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
         \begin{columns}
             \begin{column}{.5\textwidth}
                 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-                thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+                thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
                 \node[main node] (0) {$i_0$};
                 \node[main node] (1) [above right of=0] {};
                 \node[main node] (2) [below right of=1] {$i_1$};
@@ -1758,9 +1761,10 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
                 ;
                 \end{tikzpicture}
             \end{column}
+            \hspace{-35pt}
             \begin{column}{.5\textwidth}
                 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=1.5cm,
-                thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+                thick,main node/.style={circle,draw,font=\sffamily\bfseries}]
                 \node[main node] (0) {$i_{k-1}$};
                 \node[main node] (1) [above right of=0] {};
                 \node[main node] (2) [below right of=1] {$i_k$};
