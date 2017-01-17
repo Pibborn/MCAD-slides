@@ -33,7 +33,6 @@
     Finding a leader node is an important problem in distributed systems.
     
     \vspace{12pt}
-    \pause
     \textbf{Motivation}: A leader node is a node in the network with additional responsibilities.
     \begin{itemize}
         \item Communication
@@ -49,7 +48,6 @@
     \vspace{12pt}
     Each process has the same code. How do we elect a single leader?
     
-    \pause
     \vspace{12pt}
     Common techniques include the usage of randomness and/or unique process identifiers (\textbf{UIDs}).
 \end{frame}
@@ -64,7 +62,6 @@
         \item The diameter, \textbf{diam}, is known to each process.
     \end{itemize}
     
-    \pause
     \vspace{12pt}
     \textbf{Result}:
     Exactly one process should elect itself the leader.
@@ -73,16 +70,12 @@
 \begin{frame}{Synchronous Floodmax}
     \vspace{12pt}
     Each node knows the diameter \emph{diam} of the network, and has an unique identifier, UID. \\
-    \pause
-    For every round from 0 to \emph{diam}:  
-    \pause
+    For every round from 0 to \emph{diam}:
     \begin{enumerate}
         \item Send the maximum ID you found so far
-        \pause
         \item Receive another ID, $ID_{2}$. If $ID_{2} >$ UID, \\
          UID $\leftarrow$ $ID_{2}$ 
     \end{enumerate}
-    \pause
     After \emph{diam} rounds, every process will have the maximum UID of the network.
     If that UID corresponds to its own, the node will elect itself as the leader.
 \end{frame}
@@ -90,17 +83,16 @@
 \begin{frame}{Asynchronous Floodmax}{FloodMax}
     The FloodMax algorithm can be extended to the asynchronous network, by simulating
     the rounds.\\
-    \pause
+    So, each process:
     \vspace{12pt}
-    Each process sends a round r message to the neighbors, each process waits until 
-    they received the round r message from every incoming neighbor. \\ 
-    At that point, the node can prooced with the next round.\\
-    \pause
-    \vspace{12pt}
-    Simulating \emph{diam} rounds, the algorithm can terminate correctly.
+    \begin{enumerate}
+        \item Sends messages tagged with the round number; \\
+        \item When it has received the round $r$ messages from its neighbors, moves on to the next round; \\
+        \item Terminates after $diam$ rounds have been simulated. \\
+    \end{enumerate}
 \end{frame}
 
-\begin{frame}{Asynchronous Floodmax}{Simulation}
+\begin{frame}{Asynchronous Floodmax}{Simulation (1 of 3)}
 \begin{columns}
 \begin{column}{.4\textwidth}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=2cm,
@@ -145,7 +137,7 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}{Asynchronous Floodmax}{Simulation}
+\begin{frame}{Asynchronous Floodmax}{Simulation (2 of 3)}
 \begin{columns}
 \begin{column}{.4\textwidth}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=2cm,
@@ -190,7 +182,7 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}{Asynchronous Floodmax}{Simulation}
+\begin{frame}{Asynchronous Floodmax}{Simulation (3 of 3)}
 \begin{columns}
 \begin{column}{.4\textwidth}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=2cm,
@@ -221,7 +213,7 @@
   \node[main node,label=45:{\small 5}] (3) [below of=1] {3};
   \node[main node,label=above:{\small 5}] (2) [right of=3] {2};
   \node[main node,label=above:{\small 5}] (4) [left  of=3] {4};
-  \node[main node,label=45:{\small 5}] (5) [below of=3] {5};
+  \node[main node,label=45:{\small 5}, draw=red] (5) [below of=3] {5};
   \path[every node/.style={font=\sffamily\small}] 
     (3) edge node {} (1)
     (3) edge node {} (2)
@@ -250,7 +242,7 @@
     optimization.
 \end{frame}
 
-\begin{frame}{Asynchronous Floodmax}{OptFloodMax Simulation}
+\begin{frame}{Asynchronous Floodmax}{OptFloodMax Simulation (1 of 3)}
 \begin{center}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=2cm,
                     thick,main node/.style={circle,draw,font=\normalsize}]
@@ -265,7 +257,7 @@
 \end{center}
 \end{frame}
 
-\begin{frame}{Asynchronous Floodmax}{OptFloodMax Simulation}
+\begin{frame}{Asynchronous Floodmax}{OptFloodMax Simulation (2 of 3)}
 \begin{center}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=2cm,
                     thick,main node/.style={circle,draw,font=\normalsize}]
@@ -284,7 +276,7 @@
 \end{center}
 \end{frame}
 
-\begin{frame}{Asynchronous Floodmax}{OptFloodMax Simulation}
+\begin{frame}{Asynchronous Floodmax}{OptFloodMax Simulation (3 of 3)}
 \begin{center}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=2cm,
                     thick,main node/.style={circle,draw,font=\normalsize}]
@@ -328,6 +320,29 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     \vspace{12pt}
     \textbf{By having an unrooted spanning tree, we can also implement a leader election 
     easily.}
+\end{frame}
+
+\begin{frame}{STtoLeader}{Concept}
+    \textbf{Requirements}:
+    A spanning tree (any) of the network.
+    
+    
+    \vspace{12pt}
+    \textbf{Results}:
+    A leader is elected for the network.
+\end{frame}
+
+\begin{frame}{STtoLeader}{Concept}
+    The algorithm uses a convergecast of \emph{elect} messages starting from the leaves.\\
+    \begin{itemize}
+        \item Each leaf node sends an \emph{elect} message to its single neighbor; \\
+        \item Afterwards, all nodes that have received \emph{elect} messages from all their neighbors \emph{except one} send out an \emph{elect} message to that remaining neighbor
+        \item If a process receives \emph{elect} messages on every channel before
+            sending an \emph{elect} message itself, it elects itself as a leader; \\
+        \item If two \emph{elect} messages are sent on some edge in both directions, then
+            one of the two processes at the endpoints will elect itself as a leader, based 
+            on some condition (e.g., larger UID). 
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{STtoLeader}{Example (1 of 6)}
@@ -482,22 +497,6 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     \end{center}
 \end{frame}
 
-\begin{frame}{STtoLeader}{Concept}
-    The algorithm uses a convergecast of \emph{elect} messages starting from the leaves.\\
-    Each leaf node sends an \emph{elect} message to the unique neighbor.\\
-    If a node receives \emph{elect} messages from all its neighbors except one, it 
-    then sends an \emph{elect} message to that neighbor.\\
-    \vspace{12pt}
-    In the end, we have two cases:
-    \begin{itemize}
-        \item{If a process receives \emph{elect} messages on every channel before
-              sending an \emph{elect} message themselves, it elects themselves as a leader.}
-        \item{If two \emph{elect} messages are sent on some edge in both directions, then
-          one of the two processes at the endpoints will elect itself as a leader, based 
-          on some condition (e.g., larger UID).}
-    \end{itemize}
-\end{frame}
-
 \begin{frame}{Asynchronous Spanning Tree}{STtoLeader Results}
     Message complexity: \emph{n}.\\
     Time complexity: $\mathcal{O}(n*(l+d))$.\\
@@ -560,7 +559,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
   \node[main node] (8) [above right of=7] {$i_7$};
   \path[every node/.style={font=\sffamily\small}]
     (1) edge node [left] {search} (2)
-        edge [draw=green] node [left] {} (3)
+        edge [draw=red] node [left] {} (3)
     (2) edge node [left] {} (4)
     (3) edge node [left] {} (4)
     (3) edge node [left] {} (6)
@@ -583,8 +582,8 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
   \node[main node] (7) [above right of=6] {$i_6$};
   \node[main node] (8) [above right of=7] {$i_7$};
   \path[every node/.style={font=\sffamily\small}]
-    (1) edge [draw=green] node [left] {} (2)
-        edge [draw=green] node [left] {} (3)
+    (1) edge [draw=red] node [left] {} (2)
+        edge [draw=red] node [left] {} (3)
     (2) edge node [left] {search} (4)
     (3) edge node [left] {search} (4)
     (3) edge node [above left] {search} (6)
@@ -607,11 +606,11 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
   \node[main node] (7) [above right of=6] {$i_6$};
   \node[main node] (8) [above right of=7] {$i_7$};
   \path[every node/.style={font=\sffamily\small}]
-    (1) edge [draw=green] node [left] {} (2)
-        edge [draw=green] node [left] {} (3)
+    (1) edge [draw=red] node [left] {} (2)
+        edge [draw=red] node [left] {} (3)
     (2) edge node [left] {search} (4)
-    (3) edge [draw=green] node [left] {} (4)
-    (3) edge [draw=green] node [below left] {} (6)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
     (4) edge node [left] {} (5)
     (5) edge node [left] {} (7)
     (6) edge node [left] {} (7)
@@ -631,10 +630,10 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
   \node[main node] (7) [above right of=6] {$i_6$};
   \node[main node] (8) [above right of=7] {$i_7$};
   \path[every node/.style={font=\sffamily\small}]
-    (1) edge [draw=green] node [left] {} (2)
-        edge [draw=green] node [left] {} (3)
-    (3) edge [draw=green] node [left] {} (4)
-    (3) edge [draw=green] node [below left] {} (6)
+    (1) edge [draw=red] node [left] {} (2)
+        edge [draw=red] node [left] {} (3)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
     (4) edge node [left] {search} (5)
     (5) edge node [left] {} (7)
     (6) edge node [left] {search} (7)
@@ -654,11 +653,11 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
   \node[main node] (7) [above right of=6] {$i_6$};
   \node[main node] (8) [above right of=7] {$i_7$};
   \path[every node/.style={font=\sffamily\small}]
-    (1) edge [draw=green] node [left] {} (2)
-        edge [draw=green] node [left] {} (3)
-    (3) edge [draw=green] node [left] {} (4)
-    (3) edge [draw=green] node [below left] {} (6)
-    (4) edge [draw=green] node [left] {} (5)
+    (1) edge [draw=red] node [left] {} (2)
+        edge [draw=red] node [left] {} (3)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
     (5) edge node [left] {search} (7)
     (6) edge node [left] {search} (7)
     (7) edge node [left] {} (8);
@@ -677,12 +676,12 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
   \node[main node] (7) [above right of=6] {$i_6$};
   \node[main node] (8) [above right of=7] {$i_7$};
   \path[every node/.style={font=\sffamily\small}]
-    (1) edge [draw=green] node [left] {} (2)
-        edge [draw=green] node [left] {} (3)
-    (3) edge [draw=green] node [left] {} (4)
-    (3) edge [draw=green] node [below left] {} (6)
-    (4) edge [draw=green] node [left] {} (5)
-    (5) edge [draw=green] node [left] {} (7)
+    (1) edge [draw=red] node [left] {} (2)
+        edge [draw=red] node [left] {} (3)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
+    (5) edge [draw=red] node [left] {} (7)
     (6) edge node [left] {search} (7)
     (7) edge node [left] {} (8);
 \end{tikzpicture}
@@ -700,12 +699,12 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
   \node[main node] (7) [above right of=6] {$i_6$};
   \node[main node] (8) [above right of=7] {$i_7$};
   \path[every node/.style={font=\sffamily\small}]
-    (1) edge [draw=green] node [left] {} (2)
-        edge [draw=green] node [left] {} (3)
-    (3) edge [draw=green] node [left] {} (4)
-    (3) edge [draw=green] node [below left] {} (6)
-    (4) edge [draw=green] node [left] {} (5)
-    (5) edge [draw=green] node [left] {} (7)
+    (1) edge [draw=red] node [left] {} (2)
+        edge [draw=red] node [left] {} (3)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
+    (5) edge [draw=red] node [left] {} (7)
     (7) edge node [left] {search} (8);
 \end{tikzpicture}
 \end{frame}
@@ -722,13 +721,13 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
   \node[main node] (7) [above right of=6] {$i_6$};
   \node[main node] (8) [above right of=7] {$i_7$};
   \path[every node/.style={font=\sffamily\small}]
-    (1) edge [draw=green] node [left] {} (2)
-        edge [draw=green] node [left] {} (3)
-    (3) edge [draw=green] node [left] {} (4)
-    (3) edge [draw=green] node [below left] {} (6)
-    (4) edge [draw=green] node [left] {} (5)
-    (5) edge [draw=green] node [left] {} (7)
-    (7) edge [draw=green] node [left] {} (8);
+    (1) edge [draw=red] node [left] {} (2)
+        edge [draw=red] node [left] {} (3)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
+    (5) edge [draw=red] node [left] {} (7)
+    (7) edge [draw=red] node [left] {} (8);
 \end{tikzpicture}
 \end{frame}
 
@@ -1019,154 +1018,196 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 	\end{block}
 \end{frame}
 
-\begin{frame}{Breadth-First Search}{Simulation (1 of 6)}
-    \begin{center}
-        \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
-            thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
-            \node[main node, draw=red, label={[red]above:{\small dist = 0}}] (1) {$i_0$};
-            \node[main node] (2) [right of=1] {$i_1$};
-            \node[main node] (3) [below of=1] {$i_2$};
-            \node[main node] (4) [below of=2] {$i_3$};
-            \node[main node] (5) [below of=3] {$i_4$};
-            \node[main node] (6) [below of=4] {$i_5$};
-            \path[every node/.style={font=\sffamily\small}]
-            (1) edge node [above] {0} (2)
-            (1) edge node [left] {0} (3)
-            (2) edge node [left] {} (4)
-            (3) edge node [left] {} (4)
-            (3) edge node [left] {} (6)
-            (1) edge node [] {0} (4)
-            (3) edge node [left] {} (5)
-            (4) edge node [left] {} (6)
-            (5) edge node [left] {} (6)
-            ;
-        \end{tikzpicture}
-    \end{center}
+\begin{frame}{AsynchBFS}{Simulation (1 of 8)}
+    \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+    \node[main node] (1) {0};
+    \node[main node] (2) [above right of=1] {$\infty$};
+    \node[main node] (3) [below right of=1] {$\infty$};
+    \node[main node] (4) [below right of=2] {$\infty$};
+    \node[main node] (5) [above right of=4] {$\infty$};
+    \node[main node] (6) [below right of=4] {$\infty$};
+    \node[main node] (7) [above right of=6] {$\infty$};
+    \node[main node] (8) [above right of=7] {$\infty$};
+    \path[every node/.style={font=\sffamily\small}]
+    (1) edge node [left] {0} (2)
+    edge node [left] {0} (3)
+    (2) edge node [left] {} (4)
+    (3) edge node [left] {} (4)
+    (3) edge node [left] {} (6)
+    (4) edge node [left] {} (5)
+    (5) edge node [left] {} (7)
+    (6) edge node [left] {} (7)
+    (7) edge node [left] {} (8);
+    \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Breadth-First Search}{Simulation (2 of 6)}
-    \begin{center}
-        \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
-        thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
-        \node[main node, draw=red] (1) {$i_0$};
-        \node[main node, draw=red, label={[red]above:{\small dist = 1}}] (2) [right of=1] {$i_1$};
-        \node[main node, draw=red, label={[red]left:{\small dist = 1}}] (3) [below of=1] {$i_2$};
-        \node[main node] (4) [below of=2] {$i_3$};
-        \node[main node] (5) [below of=3] {$i_4$};
-        \node[main node] (6) [below of=4] {$i_5$};
-        \path[every node/.style={font=\sffamily\small}]
-        (1) edge[red] node [left] {} (2)
-        (1) edge[red] node [left] {} (3)
-        (2) edge node [left] {} (4)
-        (3) edge node [above] {1} (4)
-        (3) edge node [left] {1} (6)
-        (1) edge node [] {0} (4)
-        (3) edge node [left] {1} (5)
-        (4) edge node [left] {} (6)
-        (5) edge node [left] {} (6)
-        ;
-        \end{tikzpicture}
-    \end{center}
+\begin{frame}{AsynchBFS}{Simulation (2 of 8)}
+    \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+    \node[main node] (1) {0};
+    \node[main node] (2) [above right of=1] {1};
+    \node[main node] (3) [below right of=1] {1};
+    \node[main node] (4) [below right of=2] {$\infty$};
+    \node[main node] (5) [above right of=4] {$\infty$};
+    \node[main node] (6) [below right of=4] {$\infty$};
+    \node[main node] (7) [above right of=6] {$\infty$};
+    \node[main node] (8) [above right of=7] {$\infty$};
+    \path[every node/.style={font=\sffamily\small}]
+    (1) edge [draw=red] node [left] {} (2)
+    (1) edge [draw=red] node [left] {} (3)
+    (2) edge node [left] {1} (4)
+    (3) edge node [left] {1} (4)
+    (3) edge node [above] {1} (6)
+    (4) edge node [left] {} (5)
+    (5) edge node [left] {} (7)
+    (6) edge node [left] {} (7)
+    (7) edge node [left] {} (8);
+    \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Breadth-First Search}{Simulation (3 of 6)}
-    \begin{center}
-        \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
-        thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
-        \node[main node, draw=red] (1) {$i_0$};
-        \node[main node, draw=red] (2) [right of=1] {$i_1$};
-        \node[main node, draw=red] (3) [below of=1] {$i_2$};
-        \node[main node] (4) [below of=2] {$i_3$};
-        \node[main node, draw=red, label={[red]left:{\small dist = 2}}] (5) [below of=3] {$i_4$};
-        \node[main node, draw=red, label={[red]right:{\small dist = 2}}] (6) [below of=4] {$i_5$};
-        \path[every node/.style={font=\sffamily\small}]
-        (1) edge[red] node [left] {} (2)
-        (1) edge[red] node [left] {} (3)
-        (2) edge node [left] {} (4)
-        (3) edge node [above] {1} (4)
-        (3) edge[red] node [left] {} (6)
-        (1) edge node [above] {0} (4)
-        (3) edge[red] node [left] {} (5)
-        (4) edge node [left] {2} (6)
-        (5) edge node [below] {1} (6)
-        ;
-        \end{tikzpicture}
-    \end{center}
+\begin{frame}{AsynchBFS}{Simulation (3 of 8)}
+    \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+    \node[main node] (1) {0};
+    \node[main node] (2) [above right of=1] {1};
+    \node[main node] (3) [below right of=1] {1};
+    \node[main node] (4) [below right of=2] {2};
+    \node[main node] (5) [above right of=4] {$\infty$};
+    \node[main node] (6) [below right of=4] {$\infty$};
+    \node[main node] (7) [above right of=6] {$\infty$};
+    \node[main node] (8) [above right of=7] {$\infty$};
+    \path[every node/.style={font=\sffamily\small}]
+    (1) edge [draw=red] node [left] {} (2)
+    edge [draw=red] node [left] {} (3)
+    (2) edge node [left] {} (4)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge node [above] {2} (6)
+    (4) edge node [left] {1} (5)
+    (5) edge node [left] {} (7)
+    (6) edge node [left] {} (7)
+    (7) edge node [left] {} (8);
+    \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Breadth-First Search}{Simulation (4 of 6)}
-    \begin{center}
-        \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
-        thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
-        \node[main node, draw=red] (1) {$i_0$};
-        \node[main node, draw=red] (2) [right of=1] {$i_1$};
-        \node[main node, draw=red] (3) [below of=1] {$i_2$};
-        \node[main node, draw=red, label={[red]right:{\small dist = 3}}] (4) [below of=2] {$i_3$};
-        \node[main node, draw=red] (5) [below of=3] {$i_4$};
-        \node[main node, draw=red] (6) [below of=4] {$i_5$};
-        \path[every node/.style={font=\sffamily\small}]
-        (1) edge[red] node [left] {} (2)
-        (1) edge[red] node [left] {} (3)
-        (2) edge node [left] {} (4)
-        (3) edge node [above] {1} (4)
-        (3) edge[red] node [left] {} (6)
-        (1) edge node [above] {0} (4)
-        (3) edge[red] node [left] {} (5)
-        (4) edge[red] node [left] {} (6)
-        (5) edge node [below] {} (6)
-        ;
-        \end{tikzpicture}
-    \end{center}
+\begin{frame}{AsynchBFS}{Simulation (4 of 8)}
+    \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+    \node[main node] (1) {0};
+    \node[main node] (2) [above right of=1] {1};
+    \node[main node] (3) [below right of=1] {1};
+    \node[main node] (4) [below right of=2] {2};
+    \node[main node] (5) [above right of=4] {3};
+    \node[main node] (6) [below right of=4] {2};
+    \node[main node] (7) [above right of=6] {$\infty$};
+    \node[main node] (8) [above right of=7] {$\infty$};
+    \path[every node/.style={font=\sffamily\small}]
+    (1) edge [draw=red] node [left] {} (2)
+    edge [draw=red] node [left] {} (3)
+    (2) edge node [left] {} (4)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
+    (5) edge node [left] {3} (7)
+    (6) edge node [left] {2} (7)
+    (7) edge node [left] {} (8);
+    \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Breadth-First Search}{Simulation (5 of 6)}
-    \begin{center}
-        \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
-        thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
-        \node[main node, draw=red] (1) {$i_0$};
-        \node[main node, draw=red] (2) [right of=1] {$i_1$};
-        \node[main node, draw=red] (3) [below of=1] {$i_2$};
-        \node[main node, draw=red, label={[red]right:{\small dist = 2}}] (4) [below of=2] {$i_3$};
-        \node[main node, draw=red] (5) [below of=3] {$i_4$};
-        \node[main node, draw=red] (6) [below of=4] {$i_5$};
-        \path[every node/.style={font=\sffamily\small}]
-        (1) edge[red] node [left] {} (2)
-        (1) edge[red] node [left] {} (3)
-        (2) edge node [left] {2} (4)
-        (3) edge[red] node [above] {} (4)
-        (3) edge[red] node [left] {} (6)
-        (1) edge node [above] {0} (4)
-        (3) edge[red] node [left] {} (5)
-        (4) edge node [left] {2} (6)
-        (5) edge node [below] {} (6)
-        ;
-        \end{tikzpicture}
-    \end{center}
+\begin{frame}{AsynchBFS}{Simulation (5 of 8)}
+    \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+    \node[main node] (1) {0};
+    \node[main node] (2) [above right of=1] {1};
+    \node[main node] (3) [below right of=1] {1};
+    \node[main node] (4) [below right of=2] {2};
+    \node[main node] (5) [above right of=4] {3};
+    \node[main node] (6) [below right of=4] {2};
+    \node[main node] (7) [above right of=6] {4};
+    \node[main node] (8) [above right of=7] {$\infty$};
+    \path[every node/.style={font=\sffamily\small}]
+    (1) edge [draw=red] node [left] {} (2)
+    edge [draw=red] node [left] {} (3)
+    (2) edge node [left] {} (4)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
+    (5) edge [draw=red] node [left] {} (7)
+    (6) edge node [left] {2} (7)
+    (7) edge node [left] {4} (8);
+    \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Breadth-First Search}{Simulation (6 of 6)}
-    \begin{center}
-        \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
-        thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
-        \node[main node, draw=red] (1) {$i_0$};
-        \node[main node, draw=red] (2) [right of=1] {$i_1$};
-        \node[main node, draw=red] (3) [below of=1] {$i_2$};
-        \node[main node, draw=red, label={[red]right:{\small dist = 1}}] (4) [below of=2] {$i_3$};
-        \node[main node, draw=red] (5) [below of=3] {$i_4$};
-        \node[main node, draw=red] (6) [below of=4] {$i_5$};
-        \path[every node/.style={font=\sffamily\small}]
-        (1) edge[red] node [left] {} (2)
-        (1) edge[red] node [left] {} (3)
-        (2) edge node [left] {1} (4)
-        (3) edge node [above] {} (4)
-        (3) edge[red] node [left] {} (6)
-        (1) edge[red] node [above] {} (4)
-        (3) edge[red] node [left] {} (5)
-        (4) edge node [left] {1} (6)
-        (5) edge node [below] {} (6)
-        ;
-        \end{tikzpicture}
-    \end{center}
+\begin{frame}{AsynchBFS}{Simulation (6 of 8)}
+    \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+    \node[main node] (1) {0};
+    \node[main node] (2) [above right of=1] {1};
+    \node[main node] (3) [below right of=1] {1};
+    \node[main node] (4) [below right of=2] {2};
+    \node[main node] (5) [above right of=4] {3};
+    \node[main node] (6) [below right of=4] {2};
+    \node[main node] (7) [above right of=6] {4};
+    \node[main node] (8) [above right of=7] {5};
+    \path[every node/.style={font=\sffamily\small}]
+    (1) edge [draw=red] node [left] {} (2)
+    edge [draw=red] node [left] {} (3)
+    (2) edge node [left] {} (4)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
+    (5) edge [draw=red] node [left] {} (7)
+    (6) edge node [left] {2} (7)
+    (7) edge [draw=red] node [left] {} (8);
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{AsynchBFS}{Simulation (7 of 8)}
+    \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+    \node[main node] (1) {0};
+    \node[main node] (2) [above right of=1] {1};
+    \node[main node] (3) [below right of=1] {1};
+    \node[main node] (4) [below right of=2] {2};
+    \node[main node] (5) [above right of=4] {3};
+    \node[main node] (6) [below right of=4] {2};
+    \node[main node] (7) [above right of=6] {3};
+    \node[main node] (8) [above right of=7] {5};
+    \path[every node/.style={font=\sffamily\small}]
+    (1) edge [draw=red] node [left] {} (2)
+    edge [draw=red] node [left] {} (3)
+    (2) edge node [left] {} (4)
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
+    (5) edge  node [left] {3} (7)
+    (6) edge [draw=red] node [left] {} (7)
+    (7) edge node [left] {3} (8);
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{AsynchBFS}{Simulation (8 of 8)}
+    \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
+    thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
+    \node[main node] (1) {0};
+    \node[main node] (2) [above right of=1] {1};
+    \node[main node] (3) [below right of=1] {1};
+    \node[main node] (4) [below right of=2] {2};
+    \node[main node] (5) [above right of=4] {3};
+    \node[main node] (6) [below right of=4] {2};
+    \node[main node] (7) [above right of=6] {3};
+    \node[main node] (8) [above right of=7] {4};
+    \path[every node/.style={font=\sffamily\small}]
+    (1) edge [draw=red] node [left] {} (2)
+    edge [draw=red] node [left] {} (3)
+    (2) edge node [left] {} (4) 
+    (3) edge [draw=red] node [left] {} (4)
+    (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [draw=red] node [left] {} (5)
+    (5) edge node [left] {} (7)
+    (6) edge [draw=red] node [left] {} (7)
+    (7) edge [draw=red] node [left] {} (8);
+    \end{tikzpicture}
 \end{frame}
 
 \begin{frame}{Breadth-First Search}{Results}
