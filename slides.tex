@@ -529,7 +529,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     propagates the search message to its neighbors.
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (1 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -553,7 +553,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (2 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -577,7 +577,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (3 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -601,7 +601,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (4 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -625,7 +625,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (5 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -641,6 +641,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
         edge [draw=red] node [left] {} (3)
     (3) edge [draw=red] node [left] {} (4)
     (3) edge [draw=red] node [below left] {} (6)
+    (4) edge [] node [below right] {search} (2)
     (4) edge node [left] {search} (5)
     (5) edge node [left] {} (7)
     (6) edge node [left] {search} (7)
@@ -648,7 +649,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (6 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -671,7 +672,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (7 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -694,7 +695,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (8 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -712,11 +713,12 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     (3) edge [draw=red] node [below left] {} (6)
     (4) edge [draw=red] node [left] {} (5)
     (5) edge [draw=red] node [left] {} (7)
+    (7) edge [] node [right] {search} (6)
     (7) edge node [left] {search} (8);
 \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Asynchronous Spanning Tree}{Simulation}
+\begin{frame}{Asynchronous Spanning Tree}{Simulation (9 of 9)}
 \begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=3cm,
                     thick,main node/.style={circle,draw,font=\sffamily\Large\bfseries}]
   \node[main node] (1) {$i_0$};
@@ -771,7 +773,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
             \hspace*{2pt} {Precondition:} \\
             \hspace*{5pt} {$send(j) = search$} \\
             \hspace*{2pt} {Effect:} \\
-            \hspace*{5pt} {$send(j) := search$} \\
+            \hspace*{5pt} {$send(j) := null$} \\
             \vspace{12pt}
             $receive("search")_{j,i}$ \\
             \hspace*{2pt} {Effect:} \\
@@ -807,8 +809,24 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
     then $i$ is in this spanning tree.
     \end{block}	
+    \begin{block}{Assertion 2 - Liveness}
+        In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
+        then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
+    \end{block}	
+    \begin{block}{Conclusions}
+        From these two assertions we can then argue that the algorithm constructs a spanning tree.\\
+        Furthermore, for any $i \neq i_0$ we have $parent_i \neq null$ within time $distance(i_0,i)\cdot(l+d)$, which implies the liveness.
+    \end{block}
+\end{frame}
+
+\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
+    \begin{block}{Assertion 1}
+    In any reachable state, the edges defined by all the parent variables form a spanning tree
+    of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
+    then $i$ is in this spanning tree.
+    \end{block}	
     \pause
-    \begin{block}{Proof - Base case (will be reduced, along with blackboard explaining)}
+    \begin{block}{Proof - Base case}
     The first part is trivially proven,
     as there are no parent variables, and $G$ contains $i_0$ by definition.\\
     Second part, we have search messages starting only from $i_0$, by the algorithm definition.\\
@@ -821,7 +839,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
     then $i$ is in this spanning tree.
     \end{block}	
-    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    \begin{block}{Proof - Inductive step}
     We look at each transition, and how it does not change the invariant.
     \begin{description}
     \item[$send$]{Since the send transition sends a message from the node i to the neighbors, we need
@@ -836,7 +854,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
     then $i$ is in this spanning tree.
     \end{block}	
-    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    \begin{block}{Proof - Inductive step}
     \begin{description}
     \item[$receive$]{\small The receive of a search message to a node not in the spanning tree, allows for the node to enter the spanning tree by setting the parent variable to the neighbor that sent the message. It then sets the variables in order to send the search message to the remaining neighbors.\\
         If the node already has the parent variable set, it discards the message. 
@@ -851,7 +869,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
     then $i$ is in this spanning tree.
     \end{block}	
-    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    \begin{block}{Proof - Inductive step}
     \begin{description}
     \item[$parent$]{The parent action will activate once, as the parent variable is set, reporting the node's presence in the spanning tree.}
     \end{description}
@@ -863,7 +881,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
         In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
         then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
     \end{block}	
-    \begin{block}{Proof - Base step (will be reduced, along with blackboard explaining)}
+    \begin{block}{Proof - Base step}
     As the initial state, we have that every $parent_i = null$, so we need to only check $i_0$.
     As the initial state, $i_0$ has that for all its neighbors $send(j)_i$ contains a search message,
     therefore proving the invariant.
@@ -874,7 +892,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
         In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
         then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
     \end{block}	
-    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    \begin{block}{Proof - Inductive step}
     We look at each transition, and show how it doesn't invalidate the invariant.
     \begin{description}
     \item[$send$]{As the effect will remove the $search$ message from the $send(j)$ variable, the channel $C_{i,j}$ will now contain a $search$ message instead.}
@@ -886,7 +904,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
         In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
         then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
     \end{block}	
-    \begin{block}{Proof - Inductive step (will be reduced, along with blackboard explaining)}
+    \begin{block}{Proof - Inductive step}
     \begin{description}
     \item[$receive$]{As $parent_i$ becomes different than $null$, for each $j \in nbrs - {parent_i}$,
     it will set $send(j) = search$. For $parent_i$ instead, we can already prove from the first assertion that since a message came from $parent_i$ it must be in the spanning tree, and so its $parent$ variable different than $null$.}
@@ -894,21 +912,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     \end{description}
     \end{block}
 \end{frame}
-\begin{frame}[plain]{Asynchronous Spanning Tree}{Proof}
-    \begin{block}{Assertion 1}
-    In any reachable state, the edges defined by all the parent variables form a spanning tree
-    of a subgraph of $G$, containing $i_0$; moreover, if there is a message in any channel $C_{i,j}$,
-    then $i$ is in this spanning tree.
-    \end{block}	
-    \begin{block}{Assertion 2 - Liveness}
-        In any reachable state, if $i=i_0$ or $parent_i \neq null$, and if $j \in nbrs_i - \{i_0\}$,
-        then either $parent_j \neq null$ or $C_{i,j}$ contains a $search$ message or $send(j)_i$ contains a $search$ message.
-    \end{block}	
-    \begin{block}{Conclusions}
-        From these two assertions we can then argue that the algorithm constructs a spanning tree.\\
-        Furthermore, for any $i \neq i_0$ we have $parent_i \neq null$ within time $distance(i_0,i)\cdot(l+d)$, which implies the liveness.
-    \end{block}
-\end{frame}
+
 \begin{frame}{Asynchronous Spanning Tree}{Results}
     Number of messages: $\mathcal{O}(|E|)$.\\
     Time upper bound for all processes except $i_0$: $diam(l+d)+l$.\\
@@ -931,22 +935,10 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
     \end{block}
     \begin{block}{Child Pointers}
         Since the graph is assumed to be undirected, it's easy for the children to reply
-        directly to the parent, in order for the parent to acknowledge them, or not.\\
-        This can also implement \emph{broadcasting}.\\
-        The complexity of the approach is $\mathcal{O}(n)$ per broadcast, and time complexity
-        $\mathcal{O}(h(l+d))$ where $h$ is the height of the spanning tree, which is might be bounded
-        as $\mathcal{O}(n(l+d))$ if a \emph{AsynchSpanningTree} was used, as the height might be bigger than the diameter. \\
-    \end{block}
-\end{frame}
-
-\begin{frame}{Asynchronous Spanning Tree}{Broadcast and Child Pointers}
-    \begin{block}{Child Pointers}
+        directly to the parent, in order for the parent to acknowledge them.\\
         The spanning tree with child pointers can also be used for \emph{convergecast}, with the same complexities as the broadcast.\\
-        The two can be combined in a broadcast, followed by a convergecast to acknowledge the receival.
-    \end{block}
-    \begin{block}{Leader Election}
-        By allowing every node to initiate a broadcast-convergecast, and having UIDs, we can also solve the leader election problem, with every node discovering the maximum UID in the network, and then electing itself as a leader if the maximum UID equals to its own.\\
-        The message complexity of this approach is $\mathcal{O}(n|E|)$.
+        The two can be combined in a broadcast, followed by a convergecast to acknowledge the receival.\\
+        Only with the child pointers modification the algorithm can terminate.
     \end{block}
 \end{frame}
 

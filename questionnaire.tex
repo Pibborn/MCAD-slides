@@ -4,7 +4,12 @@
 \begin{document}
 %\printanswers
 \begin{center}
-\large Distributed Algorithms:\\ Leader election in a Asynchronous arbitrary network.
+    \large{\textbf{Distributed Algorithms}:\\ Leader election in a Asynchronous arbitrary network.\\}
+    \vspace{6pt}
+    18/01/2017 \\
+    \vspace{6pt}
+    Mattia Cerrato --- Michele Castrovilli --- Pasha Ostadi
+
 \end{center}
 \vspace{5mm}
 \begin{tabular}{l r}
@@ -46,26 +51,29 @@
     \choice{It doesn't need to have any process marked.}
 \end{checkboxes}
 
+\question{Can the AsynchSpanningTree algorithm terminate? What about the augmented version with child pointers?}
+\begin{solutionordottedlines}[0.5in]
+    The normal version cannot terminate. Augmenting the algorithm with child pointers allows the algorithm to terminate.
+\end{solutionordottedlines}
 
-\question{Which of these asynchronous algorithms terminate? \emph{(there might be more than one.)}}
-\begin{checkboxes}
-    \CorrectChoice{FloodMax}
-    \choice{OptFloodMax}
-    \CorrectChoice{AsynchSpanningTree}
-    \choice{AsynchBFS}
-    \choice{Bellman-Ford}
-\end{checkboxes}
-
-\question{There is no way to compute Breadth-First Search in an arbitrary network while also taking the shortest paths between nodes.}
-\begin{choices}
-    \choice{True}
-    \CorrectChoice{False}
-\end{choices}
+%\question{There is no way to compute Breadth-First Search in an arbitrary network while also taking the shortest paths between nodes.}
+%\begin{choices}
+%    \choice{True}
+%    \CorrectChoice{False}
+%\end{choices}
 
 \question{The Bellman-Ford algorithm always has at most polynomial time complexity.}
 \begin{choices}
     \choice{True}
     \CorrectChoice{False}
+\end{choices}
+
+\question{Which of these asynchronous algorithms terminate?}
+\begin{choices}
+    \CorrectChoice{FloodMax}
+    \choice{OptFloodMax}
+    \choice{AsynchBFS}
+    \choice{Bellman-Ford}
 \end{choices}
 
 \end{questions}
