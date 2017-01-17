@@ -226,20 +226,25 @@
 \end{frame}
 
 \begin{frame}{Asynchronous Floodmax}{OptFloodMax}
-    An optimization for the synchronous case was shown, called \emph{OptFloodMax}.\\
-    This optimization reduced greatly the number of messages sent.\\
-    \pause
+    Is there any better algorithm? \\
     \vspace{12pt}
-    Each node sends to its neighbors an update of the maximum UID they know, only if
-    it changed from the previous round.\\
-    \pause
+    There is a simple optimization that can be used to reduce the number of messages sent. The processes can propagate the maximum UID only when they first learn about them, instead of doing so each round.
     \vspace{12pt}
-    This cannot be ported to the asynchronous network, as the nodes cannot determine whether
-    they received all the messages from the current round.\\
-    \pause
+    This optimization is called \textbf{OptFloodMax}. 
+\end{frame}
+
+\begin{frame}{Asynchronous Floodmax}{OptFloodMax}
+    There are two ways to implement OptFloodMax in the asynchronous model:
+    \begin{itemize}
+        \item Round simulation, as in normal FloodMax
+        \item Purely asynchronously. 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Asynchronous Floodmax}{OptFloodMax - Round Simulation}
+    If simulating rounds, we have a \textbf{round transition} problem. \\
     \vspace{12pt}
-    Adding dummy messages to help processes determine the end of the round destroys the 
-    optimization.
+    A single process cannot determine when it has received all messages for a round $r$, so it cannot tell when to perform its round $r+1$ transition. \\
 \end{frame}
 
 \begin{frame}{Asynchronous Floodmax}{OptFloodMax Simulation (1 of 3)}
@@ -291,22 +296,20 @@
     ;
 \end{tikzpicture}
 \end{center}
-Since the nodes 1 and 2 do not receive the message for the round from 3, they never finish round 2.
+Since the nodes 1 and 2 do not receive the message for the round from 3, they never finish round 2. \\
+\vspace{12pt}
 \end{frame}
 
-\begin{frame}{Asynchronous Floodmax}{OptFloodMax}
-    The algorithm can be run purely asynchronously, without rounds.\\
-    The processes will propagate UIDs only when they receive a greater one.\\
-    \pause
+\begin{frame}{Asynchronous Floodmax}{OptFloodMax - Pure Asynchronous}
+    The algorithm can be run purely asynchronously, without rounds: the processes will propagate UIDs only when they receive a greater one.\\
     \vspace{12pt}
     This strategy will eventually propagate the maximum.\\
-    \pause
     \vspace{12pt}
-    The processes do not know when to terminate.
+    However, the processes now \textbf{do not know when to terminate}.
 \end{frame}
 
-\begin{frame}{What can we do?}
-    There are different solutions to this problem.\\
+\begin{frame}{Leader Election - What can we do?}
+    There are different solutions for electing a leader in the asynchronous model.\\
     \vspace{12pt}
     We'll be looking at the \emph{Asynchronous broadcast and convergecast, based on breadth-first search}.\\
     \vspace{12pt}
@@ -316,17 +319,21 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \section{Spanning Tree}
 \begin{frame}{Asynchronous Spanning Tree}{Why?}
     A spanning tree allows for a process to implement broadcast and convergecast on
-    an arbitrary network that allows for only point to point communication.\\
+    an arbitrary network.\\
     \vspace{12pt}
     \textbf{By having an unrooted spanning tree, we can also implement a leader election 
     easily.}
 \end{frame}
 
 \begin{frame}{STtoLeader}{Concept}
-    \textbf{Requirements}:
-    A spanning tree (any) of the network.
-    
-    
+    \textbf{Assumptions}:
+    \begin{itemize}
+        \item Usage of convergecast; \\
+        \item The network graph is undirected, with only local knowledge; \\
+        \item The processes have UIDs; \\
+        \item We have an unrooted spanning tree for the network.
+    \end{itemize}
+   
     \vspace{12pt}
     \textbf{Results}:
     A leader is elected for the network.
