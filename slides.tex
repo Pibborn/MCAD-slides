@@ -1706,10 +1706,10 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
                 \node[main node] (4) [below right of=3] {$i_2$};
                 
                 \path[every node/.style={font=\sffamily\small}]
-                (0) edge node [left] {0} (1)
+                (0) edge[draw=red] node [left] {0} (1)
                 (1) edge[draw=red] node [above right] {$2^{k-1}$} (2)
                 (0) edge node [below] {0} (2) 
-                (2) edge node [right] {0} (3)
+                (2) edge[draw=red] node [right] {0} (3)
                 (3) edge[draw=red] node [above right] {$2^{k-2}$} (4)
                 (2) edge node [below] {0} (4)
                 ;
@@ -1754,10 +1754,10 @@ In graphs like this one, $i_k$ can actually receive $O(2^n)$ distance estimates.
                 \node[main node] (4) [below right of=3] {$i_2$};
                 
                 \path[every node/.style={font=\sffamily\small}]
-                (0) edge node [left] {0} (1)
+                (0) edge[draw=red] node [left] {0} (1)
                 (1) edge[draw=red] node [above right] {$2^{k-1}$} (2)
                 (0) edge node [below] {0} (2) 
-                (2) edge node [right] {0} (3)
+                (2) edge[draw=red] node [right] {0} (3)
                 (3) edge[draw=red] node [above right] {$2^{k-2}$} (4)
                 (2) edge node [below] {0} (4)
                 ;
