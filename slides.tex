@@ -303,7 +303,7 @@ Since the nodes 1 and 2 do not receive the message for the round from 3, they ne
 \end{frame}
 
 \begin{frame}{Asynchronous Floodmax}{OptFloodMax - Pure Asynchronous}
-    The algorithm can be run purely asynchronously, without rounds: the processes will propagate UIDs only when they receive a greater one.\\
+    The algorithm can be run purely asynchronously, without rounds: the processes will propagate UIDs only when they receive a greater one. The messages will not have the round number in them. \\
     \vspace{12pt}
     This strategy will eventually propagate the maximum.\\
     \vspace{12pt}
